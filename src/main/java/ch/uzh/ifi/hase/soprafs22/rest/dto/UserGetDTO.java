@@ -1,43 +1,31 @@
 package ch.uzh.ifi.hase.soprafs22.rest.dto;
 
+import java.sql.Timestamp;
+
 import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
+import lombok.Getter;
+import lombok.Setter;
 
 public class UserGetDTO {
 
+    @Getter @Setter
     private Long id;
+
+    @Getter @Setter
     private String name;
+
+    @Getter @Setter
     private String username;
+
+    @Getter @Setter
     private UserStatus status;
 
-    public Long getId() {
-        return id;
-    }
+    @Getter @Setter
+    private Timestamp creationdate;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Getter @Setter
+    private String birthday;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
+    @Getter @Setter
+    private String token;
 }

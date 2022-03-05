@@ -1,9 +1,16 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 
 /**
  * Internal User Representation
@@ -23,57 +30,34 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue
+    @Getter @Setter
     private Long id;
 
     @Column(nullable = false)
+    @Getter @Setter
     private String name;
 
     @Column(nullable = false, unique = true)
+    @Getter @Setter
     private String username;
 
     @Column(nullable = false, unique = true)
+    @Getter @Setter
     private String token;
 
     @Column(nullable = false)
+    @Getter @Setter
     private UserStatus status;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(nullable = false)
+    @Getter @Setter
+    private String password;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column()
+    @Getter @Setter
+    private String birthday;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
+    @CreationTimestamp
+    @Getter @Setter
+    private Timestamp creationdate;
 }

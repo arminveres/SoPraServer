@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
@@ -54,5 +55,62 @@ public class UserController {
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+    }
+
+    /**
+     * This function retrieves a single User based on his ID
+     * GET REQUEST Status Code OK 200. IF fail Status Code -> 404 -> Not Found
+     */
+    @GetMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserGetDTO getUser(@PathVariable("userId") long userId){
+        // Get's the user by id -> Function implemented in the UserService
+        User user = userService.getUserbyID(userId);
+        // We change the format to a UserGetDTO
+        UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+        return userGetDTO;
+    }
+
+    /**
+     * This function is for updating the User -> PutMapping.
+     * It will update the users birthday and username
+     * PUT REQUEST Status Code 204 -> NO_CONTENT, Error: Status Code = 404 -> NOT FOUND
+     */
+    @PutMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void updateUser(@PathVariable("userId")long userId, @RequestBody UserPutDTO userPutDTO) {
+        User currentUser = userService.getUserbyID(userId);
+        User inputUser = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
+        userService.updateUser(currentUser,inputUser);
+    }
+
+    /**
+     * This function is specifically made for /login
+     * It will return a GETDTO
+     * PUT MAPPING: Http.status code  = 200 OK. Error => HTTP Status Code: NOT_Found
+     */
+    @PutMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserGetDTO checkLogin(@RequestBody UserPutDTO userPutDTO) {
+        User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
+        User user = userService.checkLoginCredentials(userInput);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    }
+
+    /**
+     * This function is made for logging the User out
+     * It sets the User.Status = Offline, when the user logs out
+     * PUT MAPPING: HTTP.Status code = 200 OK
+     */
+    @PutMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserGetDTO setUserOffline(@RequestBody UserPutDTO userPutDTO) {
+        User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
+        User user = userService.setUserOffline(userInput);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 }
