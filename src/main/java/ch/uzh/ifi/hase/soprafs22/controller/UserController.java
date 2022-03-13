@@ -107,7 +107,7 @@ public class UserController {
     @ResponseBody
     public UserGetDTO setUserOffline(@RequestBody UserPutDTO userPutDTO) {
         User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
-        User user = userService.setUserOffline(userInput);
-        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+        User logoutUser = userService.setOffline(userInput);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(logoutUser);
     }
 }

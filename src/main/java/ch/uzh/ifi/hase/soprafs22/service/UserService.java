@@ -81,8 +81,7 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-        newUser.setStatus(UserStatus.OFFLINE);
-
+        newUser.setStatus(UserStatus.ONLINE);
         checkIfUserExists(newUser);
 
         // saves the given entity but data is only persisted in the database once
@@ -150,10 +149,9 @@ public class UserService {
     }
 
     /**
-     * This function is for logging out the User
+     * @brief logs out the User
      */
-    public User setUserOffline(User user) {
-        // Get's the id of the user
+    public User setOffline(User user) {
         long id = user.getId();
         User logoutUser = userRepository.findById(id);
         logoutUser.setStatus(UserStatus.OFFLINE);
