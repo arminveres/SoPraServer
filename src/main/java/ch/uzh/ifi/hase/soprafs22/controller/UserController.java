@@ -58,51 +58,48 @@ public class UserController {
     }
 
     /**
-     * This function retrieves a single User based on his ID
-     * GET REQUEST Status Code OK 200. IF fail Status Code -> 404 -> Not Found
+     * @brief retrieves a single User based on his ID
+     * GET REQUEST: Status Code OK 200. IF fail Status Code -> 404 -> Not Found
      */
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUser(@PathVariable("userId") long userId){
-        // Get's the user by id -> Function implemented in the UserService
+    public UserGetDTO getUser(@PathVariable("userId") long userId) {
         User user = userService.getUserbyID(userId);
-        // We change the format to a UserGetDTO
         UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
         return userGetDTO;
     }
 
     /**
-     * This function is for updating the User -> PutMapping.
-     * It will update the users birthday and username
-     * PUT REQUEST Status Code 204 -> NO_CONTENT, Error: Status Code = 404 -> NOT FOUND
+     * @brief updates the User -> PutMapping
+     * PUT REQUEST: Status Code 204 -> NO_CONTENT, Error: Status Code = 404 -> NOT FOUND
      */
     @PutMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void updateUser(@PathVariable("userId")long userId, @RequestBody UserPutDTO userPutDTO) {
+    public void updateUser(@PathVariable("userId") long userId, @RequestBody UserPutDTO userPutDTO) {
         User currentUser = userService.getUserbyID(userId);
         User inputUser = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
-        userService.updateUser(currentUser,inputUser);
+        userService.updateUser(currentUser, inputUser);
     }
 
     /**
-     * This function is specifically made for /login
-     * It will return a GETDTO
-     * PUT MAPPING: Http.status code  = 200 OK. Error => HTTP Status Code: NOT_Found
+     * @brief logs the user in
+     * @return UserGetDTO
+     * PUT MAPPING: Http.status code = 200 OK. Error => HTTP Status Code: NOT_Found
      */
     @PutMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public UserGetDTO checkLogin(@RequestBody UserPutDTO userPutDTO) {
         User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
-        User user = userService.checkLoginCredentials(userInput);
+        User user = userService.checkLoginData(userInput);
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 
     /**
-     * This function is made for logging the User out
-     * It sets the User.Status = Offline, when the user logs out
+     * @brief logs the user out and sets it offline (User.Status = OFFLINE)
+     * @return UserGetDTO
      * PUT MAPPING: HTTP.Status code = 200 OK
      */
     @PutMapping("/logout")

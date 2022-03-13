@@ -62,12 +62,7 @@ public class UserService {
             String baseErrorMessage = "You cannot choose an empty Username!";
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
         }
-        // We check first, if the userInputs username is empty
         if (userInput.getUsername() != null) {
-            // If it isn't empty, we need to check, if there is already a user with this
-            // username
-            // We need to also check, that the User didn't just set the same Username as he
-            // already had
             User databaseUser = userRepository.findByUsername(userInput.getUsername());
             if (databaseUser != null && currentUser.getUsername() != databaseUser.getUsername()) {
                 String baseErrorMessage = "You cannot choose this Username. It has already been taken!";
@@ -104,7 +99,7 @@ public class UserService {
      * @throws org.springframework.web.server.ResponseStatusException
      * @returns current User
      */
-    public User checkLoginCredentials(User user) {
+    public User checkLoginData(User user) {
         String errorMessage;
         // check name
         if (userRepository.findByUsername(user.getUsername()) == null) {
@@ -144,13 +139,13 @@ public class UserService {
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
         if (userByUsername != null && userByName != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format(baseErrorMessage, "username and the name", "are"));
         } else if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format(baseErrorMessage, "username", "is"));
         } else if (userByName != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "name", "is"));
         }
     }
 
