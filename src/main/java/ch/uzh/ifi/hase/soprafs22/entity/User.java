@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.sql.Timestamp;
 
 
@@ -24,9 +26,18 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "USER")
-public class User implements Serializable {
+@NoArgsConstructor
+public class User implements Serializable, Principal {
+
+    // ! since the entity implements Principal, a java security interface,
+    // ! the name has to be an identification, but in our case it's just
+    // ! a combination of last and first name
 
     private static final long serialVersionUID = 1L;
+
+    public User(String name) {
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue
